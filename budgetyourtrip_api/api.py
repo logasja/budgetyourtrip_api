@@ -50,9 +50,7 @@ class Api(object):
         elif response.status_code != requests.codes.ok:
             response.raise_for_status()
         try:
-            json_data = response.json()
-            # print(json_data)
-            return json_data['data']
+            return response.json()['data']
         except ValueError:
             # Parsing json response failed
             pass
@@ -73,6 +71,27 @@ class Api(object):
             return None
         return model_class(data, self)
 
+    def __get_multiple(self, path, model_class):
+        """Retrieve from API endpoint that returns a list of items.
+
+        Args:
+            model (type):   The type of object to build using the response from the API.
+            path (str):     The path of API to send request to.
+
+        Returns:
+            list:           A list containing items of type model_class.
+
+        """
+        url = posixpath.join(config.END_POINT, path)
+        data = self.__get_data(url)
+        if not data:
+            return None
+        items = []
+        for json_item in data:
+            item = model_class(json_item, self)
+            items.append(item)
+        return items
+
     def category(self, id):
         """Get a category by id.
 
@@ -84,3 +103,11 @@ class Api(object):
 
         """
         return self.__build_response('categories/{0}'.format(id), models.Category)
+
+    def categories(self):
+        """Get a list of categories by id.
+
+        Returns:
+            list:           List of categories objects.
+        """
+        return self.__get_multiple('categories/', models.Category)
