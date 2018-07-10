@@ -30,7 +30,7 @@ class ApiObject(object):
         pass
 
     def _build(self, model_json):
-                """Assemble an object from a JSON representation.
+        """Assemble an object from a JSON representation.
 
         Uses ``self.attrs`` to pull values from ``model_json`` and create object attributes.
 
@@ -103,7 +103,7 @@ class Category(ApiObject):
         """
         super(Category, self).__init__()
         self._api = api
-        self.attr = {
+        self.attrs = {
             "id_"           : "category_id",
             "name"          : "name",
             "description"   : "description",
@@ -115,4 +115,70 @@ class Country(ApiObject):
     """ Class representing a Country.
 
     Attributes:
-        
+        id_ (str):          Unique country code identifier.
+        name (str):         Name of the country.
+        currency (str):     Currency code.
+        negotiate (int):    (Not sure).
+        canonical_url (str):URL on the budgetyourtrip website.
+        costs (list):       All of the :class:`Costs <Cost>` of the country.
+    """
+
+    def __init__(self, country_json, api=None):
+        """Take in a JSON representation of a country and make a Country Object.
+
+        Args:
+            country_json (json):        JSON representation of a show resource.
+            api (object, optional):     Object that implements the API.
+                                        (see :class:`~budgetyourtrip_api.budgetyourtrip_api`).
+                                        This will be used to make calls to API when needed.
+        """
+        super(Country, self).__init__()
+        self._api = api
+        self.attrs = {
+            "id_"           : "country_code",
+            "name"          : "name",
+            "canonical_url" : "url",
+            "negotiate"     : "negotiate",
+            "currency"      : "currency_code"
+        }
+        self._build(country_json)
+        self._costs = None
+
+    @property
+    @api_method
+    def costs(self):
+        """Return all seasons of the Show."""
+        if not self._costs:
+            self._costs = self._api.country_costs(self._id)
+        return self._costs
+
+class Cost(ApiObject):
+    """ Class representing a cost.
+
+    Attributes:
+        id_ (int):              Unique cost identifier.
+        budget (float):         The cost for budget travel.
+        midrange (float):       The cost for midrange travel.
+        luxury (float):         The cost for luxury travel.
+        country_code (str):     Unique country code identifier.
+    """
+
+    def __init__(self, cost_json, api=None):
+        """Take in a JSON representation of a cost and make a Cost Object.
+
+        Args:
+            cost_json (json):           JSON representation of a show resource.
+            api (object, optional):     Object that implements the API.
+                                        (see :class:`~budgetyourtrip_api.budgetyourtrip_api`).
+                                        This will be used to make calls to the API when needed.
+        """
+        super(Cost, self).__init__()
+        self._api = api
+        self.attrs = {
+            "id_"           : "category_id",
+            "budget"        : "value_budget",
+            "midrange"      : "value_midrange",
+            "luxury"        : "value_luxury",
+            "country_id"    : "country_code"
+        }
+        self._build(cost_json)
