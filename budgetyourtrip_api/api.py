@@ -151,3 +151,11 @@ class Api(object):
             object:         Country object.
         """
         return self.__build_response('costs/countryinfo/{0}'.format(country_code), models.Country)
+
+    def country_search(self, search_term):
+        """Get a list of countries that match the search term.
+
+        Returns:
+            list:           List of Countries.
+        """
+        return self.__get_multiple('search/country/{0}'.format(search_term), models.Country)

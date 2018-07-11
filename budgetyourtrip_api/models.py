@@ -140,14 +140,19 @@ class Country(ApiObject):
             "currency"      : "currency_code"
         }
         if country_json['info']:
-            self.costs = []
+            self._costs = []
             self._build(country_json['info'])
             for cost_json in country_json['costs']:
-                self.costs.append(Cost(cost_json))
+                self._costs.append(Cost(cost_json))
         else:
-            self.costs = None
+            self._costs = None
             self._build(country_json)
 
+    @property
+    def costs(self):
+        if self._costs:
+            return self._costs
+        
 
 class Cost(ApiObject):
     """ Class representing a cost.

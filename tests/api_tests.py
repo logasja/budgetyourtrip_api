@@ -43,7 +43,7 @@ class TestAPIGeneral(unittest.TestCase):
         self.assertEqual(country.name, "United States of America")
         self.assertEqual(country.currency, "USD")
         self.assertGreater(len(country.costs), 0)
-        print(country.costs)
+        # print(country.costs)
 
 if __name__ == '__main__':
     api_test = unittest.TestLoader().loadTestsFromTestCase(TestAPIGeneral)
