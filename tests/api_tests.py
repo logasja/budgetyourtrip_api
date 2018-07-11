@@ -26,6 +26,16 @@ class TestAPIGeneral(unittest.TestCase):
         currencies = self._api.currencies()
         self.assertIsNotNone(currencies)
 
+    def test_get_location(self):
+        location = self._api.location(4167147)
+        self.assertEqual(location.name, "Orlando")
+        self.assertEqual(location.currency_code, "USD")
+        self.assertEqual(location.country_code, "US")
+
+    def test_get_locations(self):
+        locations = self._api.locations_search("Georgia")
+        self.assertGreater(len(locations), 0)
+
 if __name__ == '__main__':
     api_test = unittest.TestLoader().loadTestsFromTestCase(TestAPIGeneral)
     unittest.TextTestRunner(verbosity=1).run(api_test)

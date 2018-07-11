@@ -127,3 +127,19 @@ class Api(object):
             list:           List of currency objects.
         """
         return self.__get_multiple('currencies/', models.Currency)
+
+    def location(self, geonameid):
+        """Get a location by geonameid.
+
+        Returns:
+            object:         Location object.
+        """
+        return self.__build_response('locations/{0}'.format(geonameid), models.Location)
+
+    def locations_search(self, search_term):
+        """Get a list of matching locations by search term.
+
+        Returns:
+            list:           List of location objects matching search term.
+        """
+        return self.__get_multiple('search/location/{0}'.format(search_term), models.Location)
