@@ -36,6 +36,15 @@ class TestAPIGeneral(unittest.TestCase):
         locations = self._api.locations_search("Georgia")
         self.assertGreater(len(locations), 0)
 
+    def test_get_country(self):
+        country = self._api.country_info('US')
+        self.assertIsNotNone(country)
+        self.assertEqual(country.id_, "US")
+        self.assertEqual(country.name, "United States of America")
+        self.assertEqual(country.currency, "USD")
+        self.assertGreater(len(country.costs), 0)
+        print(country.costs)
+
 if __name__ == '__main__':
     api_test = unittest.TestLoader().loadTestsFromTestCase(TestAPIGeneral)
     unittest.TextTestRunner(verbosity=1).run(api_test)

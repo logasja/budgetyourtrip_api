@@ -137,12 +137,16 @@ class Country(ApiObject):
             "name"          : "name",
             "canonical_url" : "url",
             "negotiate"     : "negotiate",
-            "currency"      : "currency_code",
-            "_info"         : "info",
-            "_costs"        : "costs"
+            "currency"      : "currency_code"
         }
-        self._build(country_json)
-        self.costs = None
+        if country_json['info']:
+            self.costs = []
+            self._build(country_json['info'])
+            for cost_json in country_json['costs']:
+                self.costs.append(Cost(cost_json))
+        else:
+            self.costs = None
+            self._build(country_json)
 
 
 class Cost(ApiObject):

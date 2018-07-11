@@ -143,3 +143,11 @@ class Api(object):
             list:           List of location objects matching search term.
         """
         return self.__get_multiple('search/location/{0}'.format(search_term), models.Location)
+
+    def country_info(self, country_code):
+        """Get a country object with cost info by country code.
+
+        Returns:
+            object:         Country object.
+        """
+        return self.__build_response('costs/countryinfo/{0}'.format(country_code), models.Country)
