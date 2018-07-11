@@ -11,7 +11,6 @@ class TestAPIGeneral(unittest.TestCase):
         category = self._api.category(1)
         self.assertEqual(category.name, "Accommodation")
         self.assertEqual(category.description, "From camping to luxury hotels, costs are for one person and assume double occupancy.")
-        self.assertEqual(category.sumtype, '1')
 
     def test_get_categories(self):
         categories = self._api.categories()

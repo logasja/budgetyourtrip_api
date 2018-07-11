@@ -89,7 +89,6 @@ class Category(ApiObject):
         id_ (int):          Unique Identifier of the category.
         name (str):         The name of the category.
         description (str):  Description of the category.
-        sumtype (int):      Type of sum done on this category.
     """
 
     def __init__(self, category_json, api=None):
@@ -106,8 +105,7 @@ class Category(ApiObject):
         self.attrs = {
             "id_"           : "category_id",
             "name"          : "name",
-            "description"   : "description",
-            "sumtype"       : "sumtype"
+            "description"   : "description"
         }
         self._build(category_json)
 
@@ -118,7 +116,7 @@ class Country(ApiObject):
         id_ (str):          Unique country code identifier.
         name (str):         Name of the country.
         currency (str):     Currency code.
-        negotiate (int):    (Not sure).
+        negotiate (int):    The usual amount for which tourists need to negotiate for prices.
         canonical_url (str):URL on the budgetyourtrip website.
         costs (list):       All of the :class:`Costs <Cost>` of the country.
     """
@@ -139,18 +137,13 @@ class Country(ApiObject):
             "name"          : "name",
             "canonical_url" : "url",
             "negotiate"     : "negotiate",
-            "currency"      : "currency_code"
+            "currency"      : "currency_code",
+            "_info"         : "info",
+            "_costs"        : "costs"
         }
         self._build(country_json)
-        self._costs = None
+        self.costs = None
 
-    @property
-    @api_method
-    def costs(self):
-        """Return all seasons of the Show."""
-        if not self._costs:
-            self._costs = self._api.country_costs(self._id)
-        return self._costs
 
 class Cost(ApiObject):
     """ Class representing a cost.
@@ -182,3 +175,48 @@ class Cost(ApiObject):
             "country_id"    : "country_code"
         }
         self._build(cost_json)
+
+class Location(ApiObject):
+    """ Class representing a cost.
+
+    Attributes:
+        id_ (int):              Geoname ID.
+        name (str):             Location name.
+        latitute (float):       Latitude.
+        longitude (float):      Longitude.
+        feature_class (str):    
+        feature_code (str):     
+        country_code (str):     
+        country_name (str):     
+        admin1_code (str):      
+        negotiate (int):        How much the traveler needs to negotiate for prices.
+        currency_code (str):    Currency code of location.
+        currency (str):         Full currency string.
+    """
+
+    def __init__(self, location_json, api=None):
+        """Take in a JSON representation of a cost and make a Cost Object.
+
+        Args:
+            location_json (json):       JSON representation of a show resource.
+            api (object, optional):     Object that implements the API.
+                                        (see :class:`~budgetyourtrip_api.budgetyourtrip_api`).
+                                        This will be used to make calls to the API when needed.
+        """
+        super(Location, self).__init__()
+        self._api = api
+        self.attrs = {
+            "id_"           : "geonameid",
+            "name"          : "name",
+            "latitude"      : "latitude",
+            "longitude"     : "longitude",
+            "feature_class" : "feature_class",
+            "feature_code"  : "feature_code",
+            "country_code"  : "country_code",
+            "country_name"  : "country_name",
+            "admin1_code"   : "admin1_code",
+            "negotiate"     : "negotiate",
+            "currency_code" : "currency_code",
+            "currency"      : "currency"
+        }
+        self._build(location_json)
