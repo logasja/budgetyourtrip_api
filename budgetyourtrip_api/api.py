@@ -111,3 +111,19 @@ class Api(object):
             list:           List of categories objects.
         """
         return self.__get_multiple('categories/', models.Category)
+
+    def currency(self, currency_code):
+        """Get a currency object by code.
+
+        Returns:
+            object:         Currency object.
+        """
+        return self.__build_response('currencies/{0}'.format(currency_code), models.Currency)
+
+    def currencies(self):
+        """Get a list of available currencies.
+
+        Returns:
+            list:           List of currency objects.
+        """
+        return self.__get_multiple('currencies/', models.Currency)
