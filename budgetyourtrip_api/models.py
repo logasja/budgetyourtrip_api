@@ -176,8 +176,36 @@ class Cost(ApiObject):
         }
         self._build(cost_json)
 
+
+class Currency(ApiObject):
+    """ Class representing a currency.
+
+    Attributes:
+        id_ (str):              Currency code.
+        name (str):             Currency name.
+        symbol (str):           Currency symbol.
+    """
+    def __init__(self, currency_json, api=None):
+        """take in a JSON representation of a currency and make a Currency object.
+
+        Args:
+            currency_json (json):       JSON representation of a currency.
+            api (object, optional):     Object that implements the API
+                                        (see :class:`~budgetyourtrip_api.budgetyourtrip_api`).
+                                        This will be used to make calls to the API when needed.
+        """
+        super(Currency, self).__init__()
+        self._api = api
+        self.attrs = {
+            "id_"           : "currency_code",
+            "name"          : "currency",
+            "symbol"        : "symbol"
+        }
+        self._build(currency_json)
+
+
 class Location(ApiObject):
-    """ Class representing a cost.
+    """ Class representing a location.
 
     Attributes:
         id_ (int):              Geoname ID.
