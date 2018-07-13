@@ -139,7 +139,7 @@ class Country(ApiObject):
             "negotiate"     : "negotiate",
             "currency"      : "currency_code"
         }
-        if country_json['info']:
+        if 'info' in country_json:
             self._costs = []
             self._build(country_json['info'])
             for cost_json in country_json['costs']:
@@ -152,7 +152,8 @@ class Country(ApiObject):
     def costs(self):
         if self._costs:
             return self._costs
-        
+        self._costs = self._api.country_costs(self.id_)
+        return self._costs
 
 class Cost(ApiObject):
     """ Class representing a cost.
@@ -181,7 +182,8 @@ class Cost(ApiObject):
             "budget"        : "value_budget",
             "midrange"      : "value_midrange",
             "luxury"        : "value_luxury",
-            "country_id"    : "country_code"
+            "country_id"    : "country_code",
+            "geoname_id"    : "geonameid"
         }
         self._build(cost_json)
 
@@ -256,4 +258,18 @@ class Location(ApiObject):
             "currency_code" : "currency_code",
             "currency"      : "currency"
         }
-        self._build(location_json)
+        if 'info' in location_json:
+            self._costs = []
+            self._build(location_json['info'])
+            for cost_json in location_json['costs']:
+                self._costs.append(Cost(cost_json))
+        else:
+            self._costs = None
+            self._build(location_json)
+
+    @property
+    def costs(self):
+        if self._costs:
+            return self._costs
+        self._costs = self._api.location_costs(self.id_)
+        return self._costs

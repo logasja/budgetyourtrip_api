@@ -8,6 +8,7 @@ Currently access:
 import posixpath
 from functools import wraps
 
+from cache_requests import Session
 import requests
 from budgetyourtrip_api import models, config
 
@@ -26,7 +27,7 @@ class Api(object):
                 If one is not supplied, a default one will be generated and used.
 
         """
-        self.__session = requests.Session()
+        self.__session = Session()
         self.__session.headers['X-API-KEY'] = key
 
     def __get_data(self, url, params=None):
@@ -134,7 +135,7 @@ class Api(object):
         Returns:
             object:         Location object.
         """
-        return self.__build_response('locations/{0}'.format(geonameid), models.Location)
+        return self.__build_response('costs/locationinfo/{0}'.format(geonameid), models.Location)
 
     def locations_search(self, search_term):
         """Get a list of matching locations by search term.
@@ -159,3 +160,19 @@ class Api(object):
             list:           List of Countries.
         """
         return self.__get_multiple('search/country/{0}'.format(search_term), models.Country)
+
+    def country_costs(self, country_code):
+        """Get a list of the costs associated with a country.
+
+        Returns:
+            list:           List of Costs.
+        """
+        return self.__get_multiple('costs/country/{0}'.format(country_code), models.Cost)
+
+    def location_costs(self, geonameid):
+        """Get a list of costs associated with a location.
+
+        Returns:
+            list:           List of Costs.
+        """
+        return self.__get_multiple('costs/location/{0}'.format(geonameid), models.Cost)
