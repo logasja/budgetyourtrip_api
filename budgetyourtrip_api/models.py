@@ -155,6 +155,30 @@ class Country(ApiObject):
         self._costs = self._api.country_costs(self.id_)
         return self._costs
 
+    def accommodation_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '1':
+                return float(cost.__dict__[style])
+        return None
+
+    def food_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '4':
+                return float(cost.__dict__[style])
+        return None
+
+    def entertainment_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '6':
+                return float(cost.__dict__[style])
+        return None
+
 class Cost(ApiObject):
     """ Class representing a cost.
 
@@ -272,4 +296,30 @@ class Location(ApiObject):
         if self._costs:
             return self._costs
         self._costs = self._api.location_costs(self.id_)
+        if self._costs == None:
+            self._costs = -1
         return self._costs
+
+    def accommodation_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '1':
+                return float(cost.__dict__[style])
+        return None
+
+    def food_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '4':
+                return float(cost.__dict__[style])
+        return None
+
+    def entertainment_cost(self, style):
+        if self.costs == -1:
+            return None
+        for cost in self.costs:
+            if cost.id_ == '6':
+                return float(cost.__dict__[style])
+        return None

@@ -50,6 +50,11 @@ class TestAPIGeneral(unittest.TestCase):
         self.assertGreater(len(countries), 0)
         self.assertGreater(len(countries[0].costs), 0)
 
+    def test_currency_convert(self):
+        usd = self._api.convert_currency(15)
+        self.assertIsNotNone(usd)
+        self.assertIsInstance(usd, float)
+
 if __name__ == '__main__':
     api_test = unittest.TestLoader().loadTestsFromTestCase(TestAPIGeneral)
     unittest.TextTestRunner(verbosity=1).run(api_test)

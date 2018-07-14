@@ -176,3 +176,15 @@ class Api(object):
             list:           List of Costs.
         """
         return self.__get_multiple('costs/location/{0}'.format(geonameid), models.Cost)
+
+    def convert_currency(self, amount, from_cur='usd', to_cur='eur'):
+        """Convert the given amount from one currency to the other.
+
+        Returns:
+            float:          The monetary value of the amount given.
+        """
+        data = self.__get_data(posixpath.join(config.END_POINT, 
+                               'currencies/convert/{0}/{1}/{2}'.format(from_cur, to_cur, amount)))
+        if not data:
+            return None
+        return data['newAmount']
